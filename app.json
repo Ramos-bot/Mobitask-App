@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "mobitask",
+    "slug": "mobitask",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#4CAF50"
+    }
+  }
+}
