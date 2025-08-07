@@ -9,7 +9,7 @@ requiredFiles = [".replit", "replit.nix", "package.json", "App.js", "app.json"]
 channel = "stable-24_11"
 
 [deployment]
-run = ["sh", "-c", "npm install && npx expo start --web --hostname 0.0.0.0"]
+run = ["npm", "run", "replit"]
 deploymentTarget = "autoscale"
 ignorePorts = false
 
