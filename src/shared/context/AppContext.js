@@ -1,6 +1,10 @@
 // Context para gestão de estado global cross-module
 import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback } from 'react';
 import DataManager from '../services/DataManager';
+import AuthService from '../services/AuthService';
+import AnalyticsService from '../services/AnalyticsService';
+import NotificationManager from '../services/NotificationManager';
+import BackupManager from '../services/BackupManager';
 import { useLicenseManager } from '../../core/licensing/LicenseManager';
 // import { MODULE_CONFIG } from '../../config/modules.config';
 

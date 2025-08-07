@@ -1,13 +1,13 @@
 {
-  "scripts": {
-    "dev": "npx expo start --web --hostname 0.0.0.0",
-    "install-deps": "npm install && npx expo install --fix",
-    "clear-cache": "npx expo start --clear --web",
-    "preview": "npx expo export && npx serve dist"
-  },
-  "replit": {
-    "dev": "npm run dev",
-    "main": "App.js",
-    "language": "javascript"
-  }
+    "scripts": {
+        "dev": "npx expo start --web --hostname 0.0.0.0",
+        "install-deps": "npm install && npx expo install --fix",
+        "clear-cache": "npx expo start --clear --web",
+        "preview": "npx expo export && npx serve dist"
+    },
+    "replit": {
+        "dev": "npm run dev",
+        "main": "App.js",
+        "language": "javascript"
+    }
 }

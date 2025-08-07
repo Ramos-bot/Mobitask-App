@@ -1,15 +1,15 @@
 entrypoint = "App.js"
 modules = ["nodejs-22", "web"]
-hidden = [".config", "package-lock.json", ".expo", "node_modules"]
+hidden = [".config", "package-lock.json", ".expo", "node_modules", ".git"]
 
 [gitHubImport]
-requiredFiles = [".replit", "replit.nix", "package.json", "package-lock.json", "App.js", "app.json"]
+requiredFiles = [".replit", "replit.nix", "package.json", "App.js", "app.json"]
 
 [nix]
 channel = "stable-24_11"
 
 [deployment]
-run = ["npx", "expo", "start", "--web"]
+run = ["sh", "-c", "npm install && npx expo start --web --hostname 0.0.0.0"]
 deploymentTarget = "autoscale"
 ignorePorts = false
 
@@ -23,6 +23,7 @@ start = ["typescript-language-server", "--stdio"]
 [env]
 EXPO_DEVTOOLS_LISTEN_ADDRESS = "0.0.0.0"
 REACT_NATIVE_PACKAGER_HOSTNAME = "0.0.0.0"
+NODE_ENV = "development"
 
 [packager]
 language = "nodejs"
@@ -32,3 +33,6 @@ ignoredPackages = ["unit_tests"]
 packageSearch = true
 guessImports = true
 enabledForHosting = false
+
+[unitTest]
+language = "nodejs"

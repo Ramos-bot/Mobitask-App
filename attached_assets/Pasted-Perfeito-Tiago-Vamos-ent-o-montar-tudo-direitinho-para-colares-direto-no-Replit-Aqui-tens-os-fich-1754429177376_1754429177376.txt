@@ -1,0 +1,139 @@
+Perfeito, Tiago! Vamos então montar tudo direitinho para colares direto no Replit. Aqui tens os ficheiros base da Mobitask com:
+
+Splash screen incluído
+
+App pronta a arrancar
+
+Estrutura organizada
+
+🗂️ Estrutura do projeto
+pgsql
+Copiar
+Editar
+mobitask-app/
+├── App.js
+├── app.json
+├── assets/
+│   └── splash.png
+└── package.json
+1. App.js
+js
+Copiar
+Editar
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Mobitask</Text>
+      <Text style={styles.subtitle}>Bem-vindo à nova era da produtividade 🌿</Text>
+      <StatusBar style="auto" />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#2e7d32',
+  },
+  subtitle: {
+    fontSize: 18,
+    marginTop: 10,
+  },
+});
+2. app.json
+json
+Copiar
+Editar
+{
+  "expo": {
+    "name": "Mobitask",
+    "slug": "mobitask",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/splash.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ]
+  }
+}
+3. package.json
+json
+Copiar
+Editar
+{
+  "name": "mobitask",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~53.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.73.0",
+    "react-native-web": "~0.19.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
+}
+4. assets/splash.png
+Já está preparado e aqui está a imagem para download 👇
+
+📎 Clica aqui para descarregar o splash.png
+
+🟢 Usa este ficheiro como assets/splash.png
+
+✅ Próximo passo no Replit
+Cria estas pastas e ficheiros:
+
+App.js
+
+app.json
+
+package.json
+
+pasta assets/
+
+dentro da pasta, faz upload da imagem como splash.png
+
+Corre o comando:
+
+bash
+Copiar
+Editar
+npm install
+Depois:
+
+bash
+Copiar
+Editar
+npm run web

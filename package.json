@@ -14,7 +14,13 @@
     "lint": "eslint .",
     "clear": "npx expo start --clear"
   },
-  "keywords": ["react-native", "expo", "mobile", "task-management", "firebase"],
+  "keywords": [
+    "react-native",
+    "expo",
+    "mobile",
+    "task-management",
+    "firebase"
+  ],
   "author": "Ramos_bot <peralta.ramos.bot@gmail.com>",
   "license": "MIT",
   "dependencies": {
@@ -26,7 +32,13 @@
     "react-native": "0.76.5",
     "react-native-web": "~0.19.13",
     "expo-status-bar": "~2.0.0",
-    "firebase": "^10.0.0"
+    "firebase": "^10.0.0",
+    "expo-constants": "~17.0.3",
+    "expo-linking": "~7.0.3",
+    "expo-router": "~4.0.9",
+    "expo-splash-screen": "~0.29.13",
+    "expo-system-ui": "~4.0.4",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
