@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^22.13.11"
+    "@types/node": "^22.13.11",
+    "expo-notifications": "~0.31.4",
+    "@react-native-async-storage/async-storage": "2.1.2"
   }
 }
