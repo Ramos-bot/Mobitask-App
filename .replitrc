@@ -1,0 +1,25 @@
+# Configuração do Replit para Mobitask App
+# Este arquivo configura o ambiente Replit para React Native/Expo
+
+# Comandos principais
+[packager]
+language = "nodejs"
+
+[env]
+EXPO_NO_DOTFILES = "1"
+EXPO_USE_LOCAL_CLI = "1"
+
+[unitTest]
+language = "nodejs"
+
+[languages.javascript]
+pattern = "**/*.{js,jsx,ts,tsx}"
+syntax = "javascript"
+
+[nix]
+channel = "stable-23_11"
+
+[interpreter]
+command = ["node", "index.js"]
+
+[gitignore]

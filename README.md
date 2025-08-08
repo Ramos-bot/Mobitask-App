@@ -1,10 +1,21 @@
-# 🏢 MobiTask - Plataforma de Gestão Profissional
+# � Mobitask App - Sistema de Gestão Empresarial
+
+[![React Native](https://img.shields.io/badge/React%20Native-v0.74-blue.svg)](https://reactnative.dev/)
+[![Expo](https://img.shields.io/badge/Expo-SDK%2053-black.svg)](https://expo.dev/)
+[![Firebase](https://img.shields.io/badge/Firebase-v11.1-orange.svg)](https://firebase.google.com/)
+[![GitHub](https://img.shields.io/badge/GitHub-Synchronized-green.svg)](https://github.com/Ramos-bot/Mobitask-App)
+[![Replit](https://img.shields.io/badge/Replit-Ready-purple.svg)](https://replit.com/)
 
 Uma plataforma modular de gestão empresarial desenvolvida em React Native/Expo, projetada para diferentes setores de negócio.
 
 ## 📱 Módulos Disponíveis
 
-### 🏊‍♂️ MobiTask Aqua
+### 📊 Módulos Base (✅ Implementados)
+- **👥 Clientes** - Gestão completa de clientes com CRUD e Firebase
+- **👤 Colaboradores** - Gestão de RH e equipas
+- **🏢 Fornecedores** - Gestão de fornecedores e parceiros
+
+### 🏊‍♂️ MobiTask Aqua (✅ Disponível)
 Sistema completo de gestão de piscinas e tratamento de água
 - Monitoramento de qualidade da água
 - Gestão de clientes e serviços
@@ -66,6 +77,50 @@ src/
 - **AsyncStorage** - Armazenamento local
 - **React Navigation** - Navegação
 - **Linear Gradient** - Interfaces modernas
+
+## 🌐 Sincronização e Deploy
+
+### 📂 GitHub Integration
+O projeto está sincronizado com GitHub para controle de versão:
+
+```bash
+# Sincronizar mudanças
+git add .
+git commit -m "feat: nova funcionalidade"
+git push origin main
+```
+
+**Repositório**: [https://github.com/Ramos-bot/Mobitask-App](https://github.com/Ramos-bot/Mobitask-App)
+
+### 🔄 Replit Configuration
+Para executar no Replit:
+
+1. **Importar do GitHub**:
+   - Aceder a [Replit.com](https://replit.com)
+   - "Create Repl" → "Import from GitHub"
+   - URL: `https://github.com/Ramos-bot/Mobitask-App.git`
+
+2. **Executar no Replit**:
+   ```bash
+   npm install
+   npm start
+   ```
+
+### 📱 Estrutura dos Módulos Base
+
+```
+modules/base/
+├── DashboardBase.js      # Hub principal dos módulos
+├── ClientesScreen.js     # 👥 Gestão de clientes
+├── ColaboradoresScreen.js # 👤 Gestão de colaboradores
+└── FornecedoresScreen.js # 🏢 Gestão de fornecedores
+```
+
+### 🔥 Firebase Integration
+- **Firestore Database** - Dados em tempo real
+- **Authentication** - Login seguro
+- **Analytics** - Métricas de utilização
+- **Offline Support** - Funciona sem conexão
 
 ## 📊 Funcionalidades Principais
 
