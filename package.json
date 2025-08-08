@@ -12,6 +12,7 @@
     "replit:dev": "npx expo start --web --host lan --port 8081",
     "build": "npx expo export",
     "build:web": "npx expo export --platform web",
+    "production": "npm run build:web && npx serve -s dist -p 5000",
     "serve": "npx serve -s web-build -p 5000 --host 0.0.0.0",
     "deploy:replit": "npm run build:web && npm run serve",
     "test": "jest",
