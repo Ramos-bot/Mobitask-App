@@ -1,4 +1,42 @@
-# � Mobitask App - Sistema de Gestão Empresarial
+# 📱 Mobitask App - Sistema de Gestão Empresarial
+
+[![React Native](https://img.shields.io/badge/React%20Native-v0.74-blue.svg)](https://reactnative.dev/)
+[![Expo](https://img.shields.io/badge/Expo-SDK%2053-black.svg)](https://expo.dev/)
+[![Firebase](https://img.shields.io/badge/Firebase-v11.1-orange.svg)](https://firebase.google.com/)
+[![GitHub](https://img.shields.io/badge/GitHub-Synchronized-green.svg)](https://github.com/Ramos-bot/Mobitask-App)
+[![Replit](https://img.shields.io/badge/Replit-Ready-purple.svg)](https://replit.com/)
+
+Uma plataforma modular de gestão empresarial desenvolvida em React Native/Expo, projetada para diferentes setores de negócio.
+
+## 🚀 Deploy e Produção
+
+### 📦 Desenvolvimento Local
+```bash
+# Desenvolvimento web local
+expo start --web
+
+# Mobile development
+expo start
+```
+
+### 🌐 Deploy para Produção (Replit)
+```bash
+# Build e deploy em produção (porta 5000)
+npm run deploy
+
+# Apenas build
+npm run build:web
+
+# Apenas servir (após build)
+npm run serve:prod
+```
+
+### 🔍 Healthcheck
+- **Endpoint**: `/health`
+- **Resposta**: `200 ok`
+- **URL**: `http://localhost:5000/health`
+
+## 📱 Módulos Disponíveisk App - Sistema de Gestão Empresarial
 
 [![React Native](https://img.shields.io/badge/React%20Native-v0.74-blue.svg)](https://reactnative.dev/)
 [![Expo](https://img.shields.io/badge/Expo-SDK%2053-black.svg)](https://expo.dev/)

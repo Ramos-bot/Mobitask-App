@@ -1,0 +1,200 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Utility functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    function getUserRole() {
+      return getUserData().role;
+    }
+    
+    function getUserCompanyId() {
+      return getUserData().companyId;
+    }
+    
+    function hasRole(role) {
+      return isAuthenticated() && getUserRole() == role;
+    }
+    
+    function isAdmin() {
+      return hasRole('admin');
+    }
+    
+    function isColaborador() {
+      return hasRole('colaborador');
+    }
+    
+    function belongsToUserCompany(resource) {
+      return resource.data.companyId == getUserCompanyId();
+    }
+    
+    function hasModuleAccess(module) {
+      let userData = getUserData();
+      return userData.modules != null && userData.modules[module] == true;
+    }
+    
+    function isOwnerOrAdmin(resource) {
+      return isAdmin() || resource.data.createdBy == request.auth.uid;
+    }
+    
+    // Users collection - only admins can manage users
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (
+        userId == request.auth.uid || 
+        (isAdmin() && belongsToUserCompany(resource))
+      );
+      allow create: if isAdmin() && 
+        request.resource.data.companyId == getUserCompanyId();
+      allow update: if isAuthenticated() && (
+        userId == request.auth.uid ||
+        (isAdmin() && belongsToUserCompany(resource))
+      );
+      allow delete: if isAdmin() && belongsToUserCompany(resource);
+    }
+    
+    // Companies collection - only system admins
+    match /companies/{companyId} {
+      allow read: if isAuthenticated() && companyId == getUserCompanyId();
+      allow write: if false; // Only through Cloud Functions
+    }
+    
+    // Base collection for multi-module data
+    match /base/{documentId} {
+      allow read: if isAuthenticated() && belongsToUserCompany(resource);
+      allow create: if isAuthenticated() && 
+        request.resource.data.companyId == getUserCompanyId() &&
+        request.resource.data.createdBy == request.auth.uid;
+      allow update: if isAuthenticated() && 
+        belongsToUserCompany(resource) &&
+        (isAdmin() || resource.data.createdBy == request.auth.uid);
+      allow delete: if isAuthenticated() && 
+        belongsToUserCompany(resource) &&
+        (isAdmin() || resource.data.createdBy == request.auth.uid);
+    }
+    
+    // Verde module - pool maintenance
+    match /verde/{documentId} {
+      allow read, write: if isAuthenticated() && 
+        belongsToUserCompany(resource) &&
+        hasModuleAccess('verde');
+      
+      // Clientes subcollection
+      match /clientes/{clienteId} {
+        allow read, write: if isAuthenticated() && 
+          belongsToUserCompany(get(/databases/$(database)/documents/verde/$(documentId)).data) &&
+          hasModuleAccess('verde');
+        
+        // Piscinas subcollection
+        match /piscinas/{piscinaId} {
+          allow read, write: if isAuthenticated() && 
+            belongsToUserCompany(get(/databases/$(database)/documents/verde/$(documentId)).data) &&
+            hasModuleAccess('verde');
+          
+          // Tarefas subcollection
+          match /tarefas/{tarefaId} {
+            allow read, write: if isAuthenticated() && 
+              belongsToUserCompany(get(/databases/$(database)/documents/verde/$(documentId)).data) &&
+              hasModuleAccess('verde');
+          }
+        }
+      }
+    }
+    
+    // Aqua module - water analysis
+    match /aqua/{documentId} {
+      allow read, write: if isAuthenticated() && 
+        belongsToUserCompany(resource) &&
+        hasModuleAccess('aqua');
+      
+      // Análises subcollection
+      match /analises/{analiseId} {
+        allow read, write: if isAuthenticated() && 
+          belongsToUserCompany(get(/databases/$(database)/documents/aqua/$(documentId)).data) &&
+          hasModuleAccess('aqua');
+      }
+      
+      // Alertas subcollection
+      match /alertas/{alertaId} {
+        allow read, write: if isAuthenticated() && 
+          belongsToUserCompany(get(/databases/$(database)/documents/aqua/$(documentId)).data) &&
+          hasModuleAccess('aqua');
+      }
+    }
+    
+    // Phyto module - plant health
+    match /phyto/{documentId} {
+      allow read, write: if isAuthenticated() && 
+        belongsToUserCompany(resource) &&
+        hasModuleAccess('phyto');
+      
+      // Plantas subcollection
+      match /plantas/{plantaId} {
+        allow read, write: if isAuthenticated() && 
+          belongsToUserCompany(get(/databases/$(database)/documents/phyto/$(documentId)).data) &&
+          hasModuleAccess('phyto');
+        
+        // Tratamentos subcollection
+        match /tratamentos/{tratamentoId} {
+          allow read, write: if isAuthenticated() && 
+            belongsToUserCompany(get(/databases/$(database)/documents/phyto/$(documentId)).data) &&
+            hasModuleAccess('phyto');
+        }
+      }
+    }
+    
+    // Privacy and RGPD collections
+    match /privacy/{documentId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && 
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.companyId == getUserCompanyId();
+      allow update: if isAuthenticated() && 
+        resource.data.userId == request.auth.uid;
+      allow delete: if isAdmin() && belongsToUserCompany(resource);
+    }
+    
+    // Audit logs - read-only for admins
+    match /auditLogs/{logId} {
+      allow read: if isAdmin() && belongsToUserCompany(resource);
+      allow write: if false; // Only through Cloud Functions
+    }
+    
+    // Notifications
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && 
+        request.resource.data.companyId == getUserCompanyId();
+      allow update: if isAuthenticated() && 
+        resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isAdmin());
+    }
+    
+    // File metadata for storage references
+    match /files/{fileId} {
+      allow read, write: if isAuthenticated() && 
+        belongsToUserCompany(resource);
+    }
+    
+    // System configuration - admin only
+    match /config/{configId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only through Cloud Functions
+    }
+    
+    // Block all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -2,7 +2,7 @@ entrypoint = "index.js"
 modules = ["nodejs-22", "web"]
 hidden = [".config", "package-lock.json", ".expo", "node_modules", ".git"]
 
-run = "npm run web"
+run = "npm run deploy"
 
 [gitHubImport]
 requiredFiles = [".replit", "replit.nix", "package.json", "index.js", "app.json"]
