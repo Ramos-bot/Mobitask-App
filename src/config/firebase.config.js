@@ -2,8 +2,18 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { getStorage, connectStorageEmulator } from 'firebase/storage';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { initializeAuth, getAuth, connectAuthEmulator, getReactNativePersistence } from 'firebase/auth';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Safe Platform import for web compatibility
+let Platform;
+try {
+    Platform = require('react-native').Platform;
+} catch (error) {
+    // Fallback for web environment
+    Platform = { OS: 'web' };
+}
 
 // Configuration for different environments
 const firebaseConfigs = {
@@ -39,11 +49,34 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase services
 const db = getFirestore(app);
 const storage = getStorage(app);
-const auth = getAuth(app);
+
+// Initialize Auth with proper persistence for React Native
+let auth;
+try {
+    if (Platform.OS === 'web') {
+        // Web uses default persistence
+        auth = getAuth(app);
+    } else {
+        // React Native uses AsyncStorage persistence
+        try {
+            auth = initializeAuth(app, {
+                persistence: getReactNativePersistence(AsyncStorage)
+            });
+        } catch (error) {
+            // If initializeAuth fails (auth already initialized), fall back to getAuth
+            console.log('Auth already initialized, using getAuth');
+            auth = getAuth(app);
+        }
+    }
+} catch (error) {
+    console.log('Error initializing auth, falling back to getAuth:', error);
+    auth = getAuth(app);
+}
+
 const functions = getFunctions(app);
 
 // Configure emulators for development
-if (isDevelopment && !auth._delegate._config?.emulator) {
+if (isDevelopment) {
     try {
         // Only connect to emulators if they're not already connected
         console.log('🔧 Connecting to Firebase emulators...');
@@ -75,7 +108,7 @@ export {
 
 // Export utility functions
 export const isEmulatorMode = () => {
-    return isDevelopment && auth._delegate._config?.emulator;
+    return isDevelopment;
 };
 
 export const getFirebaseEnv = () => environment;

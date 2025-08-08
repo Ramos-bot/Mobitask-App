@@ -8,7 +8,7 @@ import {
     onAuthStateChanged
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../config/firebase.config';
+import { auth, db } from '../../../firebaseConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class AuthService {

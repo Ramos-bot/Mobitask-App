@@ -43,6 +43,7 @@ export default function DashboardBase({ user, onModuleSelect, onNavigate }) {
         { id: 'aqua', icon: '💧', name: 'Mobitask Aqua', color: '#1e88e5', action: () => onModuleSelect('aqua') },
         { id: 'verde', icon: '🌱', name: 'Mobitask Verde', color: '#4caf50', action: () => onModuleSelect('verde') },
         { id: 'phyto', icon: '🧪', name: 'Mobitask Phyto', color: '#ff9800', action: () => onModuleSelect('phyto') },
+        { id: 'base-modules', icon: '⚙️', name: 'Módulos Base', color: '#f44336', action: () => onNavigate('dashboard-base-modules') },
         { id: 'calendar', icon: '📅', name: 'Calendário', color: '#9c27b0', action: () => onNavigate('calendar') },
         { id: 'clients', icon: '👥', name: 'Clientes', color: '#673ab7', action: () => onNavigate('clients') },
         { id: 'analytics', icon: '📊', name: 'Relatórios', color: '#00bcd4', action: () => onNavigate('analytics') },

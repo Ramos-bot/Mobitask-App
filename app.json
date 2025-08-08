@@ -28,7 +28,8 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-notifications"
+      "expo-notifications",
+      "expo-router"
     ],
     "scheme": "mobitask",
     "platforms": [

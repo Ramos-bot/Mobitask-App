@@ -17,6 +17,12 @@ import TesteLicenciamento from './TesteLicenciamento';
 import NotificationSettingsScreen from './NotificationSettingsScreen';
 import BackupScreen from './BackupScreen';
 
+// Importar novos módulos base
+import BaseModulesDashboard from '../../modules/base/DashboardBase';
+import BaseClientesScreen from '../../modules/base/ClientesScreen';
+import BaseColaboradoresScreen from '../../modules/base/ColaboradoresScreen';
+import BaseFornecedoresScreen from '../../modules/base/FornecedoresScreen';
+
 export default function MobitaskBaseNavigator({ user, onModuleSelect, onLogout }) {
     const [currentScreen, setCurrentScreen] = useState('dashboard');
     const [screenParams, setScreenParams] = useState({});
@@ -141,6 +147,37 @@ export default function MobitaskBaseNavigator({ user, onModuleSelect, onLogout }
             return (
                 <BackupScreen
                     {...commonProps}
+                />
+            );
+
+        case 'dashboard-base-modules':
+            return (
+                <BaseModulesDashboard
+                    {...commonProps}
+                />
+            );
+
+        case 'clientes':
+            return (
+                <BaseClientesScreen
+                    {...commonProps}
+                    moduleInfo={{ icon: '👥', title: 'Clientes' }}
+                />
+            );
+
+        case 'colaboradores':
+            return (
+                <BaseColaboradoresScreen
+                    {...commonProps}
+                    moduleInfo={{ icon: '👤', title: 'Colaboradores' }}
+                />
+            );
+
+        case 'fornecedores':
+            return (
+                <BaseFornecedoresScreen
+                    {...commonProps}
+                    moduleInfo={{ icon: '🏢', title: 'Fornecedores' }}
                 />
             );
 

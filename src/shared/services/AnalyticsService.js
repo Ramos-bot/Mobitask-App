@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { db } from '../config/firebase.config';
+import { db } from '../../../firebaseConfig';
 import { collection, addDoc, doc, updateDoc, increment } from 'firebase/firestore';
 
 class AnalyticsService {
