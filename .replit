@@ -2,6 +2,8 @@ entrypoint = "index.js"
 modules = ["nodejs-22", "web"]
 hidden = [".config", "package-lock.json", ".expo", "node_modules", ".git"]
 
+run = "npm run replit:start"
+
 [gitHubImport]
 requiredFiles = [".replit", "replit.nix", "package.json", "index.js", "app.json"]
 
@@ -9,9 +11,14 @@ requiredFiles = [".replit", "replit.nix", "package.json", "index.js", "app.json"
 channel = "stable-24_11"
 
 [deployment]
-run = ["sh", "start.sh"]
+run = ["sh", "-c", "npm run build:web && npx serve -s web-build -l 5000"]
 deploymentTarget = "autoscale"
 ignorePorts = false
+
+[env]
+NODE_ENV = "production"
+PORT = "5000"
+EXPO_USE_FAST_REFRESH = "false"
 
 [languages.javascript]
 pattern = "**/{*.js,*.jsx,*.ts,*.tsx}"

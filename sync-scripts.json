@@ -1,0 +1,12 @@
+{
+    "scripts": {
+        "start": "expo start",
+        "android": "expo start --android",
+        "ios": "expo start --ios",
+        "web": "expo start --web",
+        "sync": "git add . && git commit -m \"sync: Atualizações automáticas\" && git push origin main",
+        "deploy:github": "npm run sync",
+        "deploy:replit": "echo 'Projeto sincronizado! Acesse https://replit.com para importar do GitHub'",
+        "setup:replit": "npm install && npm start"
+    }
+}

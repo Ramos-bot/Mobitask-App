@@ -1,12 +1,21 @@
 #!/bin/bash
 
-# Simplified Replit startup for Mobitask App
+# Script de inicialização para Replit - Mobitask App
 echo "🚀 Starting Mobitask App..."
 
-# Install dependencies
-echo "📦 Installing dependencies..."
-npm install
+# Install dependencies if needed
+if [ ! -d "node_modules" ]; then
+    echo "📦 Installing dependencies..."
+    npm install
+fi
 
-# Start the app with minimal configuration
-echo "🌐 Starting development server..."
-npx expo start --web --hostname 0.0.0.0
+# Check if this is for deployment (production)
+if [ "$NODE_ENV" = "production" ]; then
+    echo "🏗️ Building for production..."
+    npm run build:web
+    echo "🌐 Serving production build on port 5000..."
+    npx serve -s web-build -l 5000
+else
+    echo "🔧 Starting development server..."
+    npm run replit:start
+fi
