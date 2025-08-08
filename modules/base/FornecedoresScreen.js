@@ -7,32 +7,17 @@ import {
     SafeAreaView,
     ScrollView,
     TextInput,
-    Alert,
-    Modal
+    Alert
 } from 'react-native';
 import { db } from '../../firebaseConfig';
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import FornecedorForm from './FornecedorForm';
 
 const FornecedoresScreen = ({ onBack, moduleInfo }) => {
     const [fornecedores, setFornecedores] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [editingFornecedor, setEditingFornecedor] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-
-    // Formulário
-    const [formData, setFormData] = useState({
-        nome: '',
-        razaoSocial: '',
-        cnpj: '',
-        email: '',
-        telefone: '',
-        endereco: '',
-        cidade: '',
-        estado: '',
-        cep: '',
-        categoria: '',
-        observacoes: ''
-    });
 
     useEffect(() => {
         carregarFornecedores();
@@ -52,24 +37,19 @@ const FornecedoresScreen = ({ onBack, moduleInfo }) => {
         }
     };
 
-    const salvarFornecedor = async () => {
-        if (!formData.nome.trim()) {
-            Alert.alert('Erro', 'Nome é obrigatório');
-            return;
-        }
-
+    const salvarFornecedor = async (fornecedorData) => {
         try {
             if (editingFornecedor) {
                 // Atualizar fornecedor existente
                 await updateDoc(doc(db, 'fornecedores', editingFornecedor.id), {
-                    ...formData,
+                    ...fornecedorData,
                     updatedAt: new Date()
                 });
                 Alert.alert('Sucesso', 'Fornecedor atualizado com sucesso');
             } else {
                 // Criar novo fornecedor
                 await addDoc(collection(db, 'fornecedores'), {
-                    ...formData,
+                    ...fornecedorData,
                     createdAt: new Date(),
                     updatedAt: new Date()
                 });
@@ -109,56 +89,13 @@ const FornecedoresScreen = ({ onBack, moduleInfo }) => {
     };
 
     const abrirModal = (fornecedor = null) => {
-        if (fornecedor) {
-            setEditingFornecedor(fornecedor);
-            setFormData({
-                nome: fornecedor.nome || '',
-                razaoSocial: fornecedor.razaoSocial || '',
-                cnpj: fornecedor.cnpj || '',
-                email: fornecedor.email || '',
-                telefone: fornecedor.telefone || '',
-                endereco: fornecedor.endereco || '',
-                cidade: fornecedor.cidade || '',
-                estado: fornecedor.estado || '',
-                cep: fornecedor.cep || '',
-                categoria: fornecedor.categoria || '',
-                observacoes: fornecedor.observacoes || ''
-            });
-        } else {
-            setEditingFornecedor(null);
-            setFormData({
-                nome: '',
-                razaoSocial: '',
-                cnpj: '',
-                email: '',
-                telefone: '',
-                endereco: '',
-                cidade: '',
-                estado: '',
-                cep: '',
-                categoria: '',
-                observacoes: ''
-            });
-        }
+        setEditingFornecedor(fornecedor);
         setModalVisible(true);
     };
 
     const fecharModal = () => {
         setModalVisible(false);
         setEditingFornecedor(null);
-        setFormData({
-            nome: '',
-            razaoSocial: '',
-            cnpj: '',
-            email: '',
-            telefone: '',
-            endereco: '',
-            cidade: '',
-            estado: '',
-            cep: '',
-            categoria: '',
-            observacoes: ''
-        });
     };
 
     const fornecedoresFiltrados = fornecedores.filter(fornecedor =>
@@ -245,114 +182,12 @@ const FornecedoresScreen = ({ onBack, moduleInfo }) => {
             </ScrollView>
 
             {/* Modal de Formulário */}
-            <Modal
-                animationType="slide"
-                transparent={true}
+            <FornecedorForm
                 visible={modalVisible}
-                onRequestClose={fecharModal}
-            >
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>
-                            {editingFornecedor ? 'Editar Fornecedor' : 'Novo Fornecedor'}
-                        </Text>
-
-                        <ScrollView style={styles.formContainer}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Nome/Nome Fantasia *"
-                                value={formData.nome}
-                                onChangeText={(text) => setFormData({ ...formData, nome: text })}
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Razão Social"
-                                value={formData.razaoSocial}
-                                onChangeText={(text) => setFormData({ ...formData, razaoSocial: text })}
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="CNPJ"
-                                value={formData.cnpj}
-                                onChangeText={(text) => setFormData({ ...formData, cnpj: text })}
-                                keyboardType="numeric"
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Email"
-                                value={formData.email}
-                                onChangeText={(text) => setFormData({ ...formData, email: text })}
-                                keyboardType="email-address"
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Telefone"
-                                value={formData.telefone}
-                                onChangeText={(text) => setFormData({ ...formData, telefone: text })}
-                                keyboardType="phone-pad"
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Categoria (Ex: Equipamentos, Químicos, Serviços)"
-                                value={formData.categoria}
-                                onChangeText={(text) => setFormData({ ...formData, categoria: text })}
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Endereço"
-                                value={formData.endereco}
-                                onChangeText={(text) => setFormData({ ...formData, endereco: text })}
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Cidade"
-                                value={formData.cidade}
-                                onChangeText={(text) => setFormData({ ...formData, cidade: text })}
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Estado"
-                                value={formData.estado}
-                                onChangeText={(text) => setFormData({ ...formData, estado: text })}
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="CEP"
-                                value={formData.cep}
-                                onChangeText={(text) => setFormData({ ...formData, cep: text })}
-                                keyboardType="numeric"
-                            />
-
-                            <TextInput
-                                style={[styles.input, styles.textArea]}
-                                placeholder="Observações"
-                                value={formData.observacoes}
-                                onChangeText={(text) => setFormData({ ...formData, observacoes: text })}
-                                multiline
-                                numberOfLines={3}
-                            />
-                        </ScrollView>
-
-                        <View style={styles.modalActions}>
-                            <TouchableOpacity style={styles.cancelButton} onPress={fecharModal}>
-                                <Text style={styles.cancelButtonText}>Cancelar</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.saveButton} onPress={salvarFornecedor}>
-                                <Text style={styles.saveButtonText}>Salvar</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+                onClose={fecharModal}
+                onSave={salvarFornecedor}
+                editingFornecedor={editingFornecedor}
+            />
         </SafeAreaView>
     );
 };

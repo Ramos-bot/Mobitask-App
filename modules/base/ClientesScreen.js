@@ -7,26 +7,17 @@ import {
     SafeAreaView,
     ScrollView,
     TextInput,
-    Alert,
-    Modal
+    Alert
 } from 'react-native';
 import { db } from '../../firebaseConfig';
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import ClienteForm from './ClienteForm';
 
 const ClientesScreen = ({ onBack, moduleInfo }) => {
     const [clientes, setClientes] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [editingCliente, setEditingCliente] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-
-    // Formulário
-    const [formData, setFormData] = useState({
-        nome: '',
-        email: '',
-        telefone: '',
-        empresa: '',
-        endereco: ''
-    });
 
     useEffect(() => {
         carregarClientes();
@@ -46,24 +37,19 @@ const ClientesScreen = ({ onBack, moduleInfo }) => {
         }
     };
 
-    const salvarCliente = async () => {
-        if (!formData.nome.trim()) {
-            Alert.alert('Erro', 'Nome é obrigatório');
-            return;
-        }
-
+    const salvarCliente = async (clienteData) => {
         try {
             if (editingCliente) {
                 // Atualizar cliente existente
                 await updateDoc(doc(db, 'clientes', editingCliente.id), {
-                    ...formData,
+                    ...clienteData,
                     updatedAt: new Date()
                 });
                 Alert.alert('Sucesso', 'Cliente atualizado com sucesso');
             } else {
                 // Criar novo cliente
                 await addDoc(collection(db, 'clientes'), {
-                    ...formData,
+                    ...clienteData,
                     createdAt: new Date(),
                     updatedAt: new Date()
                 });
@@ -103,38 +89,13 @@ const ClientesScreen = ({ onBack, moduleInfo }) => {
     };
 
     const abrirModal = (cliente = null) => {
-        if (cliente) {
-            setEditingCliente(cliente);
-            setFormData({
-                nome: cliente.nome || '',
-                email: cliente.email || '',
-                telefone: cliente.telefone || '',
-                empresa: cliente.empresa || '',
-                endereco: cliente.endereco || ''
-            });
-        } else {
-            setEditingCliente(null);
-            setFormData({
-                nome: '',
-                email: '',
-                telefone: '',
-                empresa: '',
-                endereco: ''
-            });
-        }
+        setEditingCliente(cliente);
         setModalVisible(true);
     };
 
     const fecharModal = () => {
         setModalVisible(false);
         setEditingCliente(null);
-        setFormData({
-            nome: '',
-            email: '',
-            telefone: '',
-            empresa: '',
-            endereco: ''
-        });
     };
 
     const clientesFiltrados = clientes.filter(cliente =>
@@ -208,70 +169,12 @@ const ClientesScreen = ({ onBack, moduleInfo }) => {
             </ScrollView>
 
             {/* Modal de Formulário */}
-            <Modal
-                animationType="slide"
-                transparent={true}
+            <ClienteForm
                 visible={modalVisible}
-                onRequestClose={fecharModal}
-            >
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>
-                            {editingCliente ? 'Editar Cliente' : 'Novo Cliente'}
-                        </Text>
-
-                        <ScrollView style={styles.formContainer}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Nome *"
-                                value={formData.nome}
-                                onChangeText={(text) => setFormData({ ...formData, nome: text })}
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Email"
-                                value={formData.email}
-                                onChangeText={(text) => setFormData({ ...formData, email: text })}
-                                keyboardType="email-address"
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Telefone"
-                                value={formData.telefone}
-                                onChangeText={(text) => setFormData({ ...formData, telefone: text })}
-                                keyboardType="phone-pad"
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Empresa"
-                                value={formData.empresa}
-                                onChangeText={(text) => setFormData({ ...formData, empresa: text })}
-                            />
-
-                            <TextInput
-                                style={[styles.input, styles.textArea]}
-                                placeholder="Endereço"
-                                value={formData.endereco}
-                                onChangeText={(text) => setFormData({ ...formData, endereco: text })}
-                                multiline
-                                numberOfLines={3}
-                            />
-                        </ScrollView>
-
-                        <View style={styles.modalActions}>
-                            <TouchableOpacity style={styles.cancelButton} onPress={fecharModal}>
-                                <Text style={styles.cancelButtonText}>Cancelar</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.saveButton} onPress={salvarCliente}>
-                                <Text style={styles.saveButtonText}>Salvar</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+                onClose={fecharModal}
+                onSave={salvarCliente}
+                editingCliente={editingCliente}
+            />
         </SafeAreaView>
     );
 };

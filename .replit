@@ -11,7 +11,7 @@ requiredFiles = [".replit", "replit.nix", "package.json", "index.js", "app.json"
 channel = "stable-24_11"
 
 [deployment]
-run = ["sh", "-c", "npm run production"]
+run = ["sh", "-c", "npm run deploy:replit"]
 deploymentTarget = "autoscale"
 ignorePorts = false
 

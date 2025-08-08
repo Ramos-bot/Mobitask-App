@@ -7,28 +7,17 @@ import {
     SafeAreaView,
     ScrollView,
     TextInput,
-    Alert,
-    Modal
+    Alert
 } from 'react-native';
 import { db } from '../../firebaseConfig';
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import ColaboradorForm from './ColaboradorForm';
 
 const ColaboradoresScreen = ({ onBack, moduleInfo }) => {
     const [colaboradores, setColaboradores] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [editingColaborador, setEditingColaborador] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-
-    // Formulário
-    const [formData, setFormData] = useState({
-        nome: '',
-        email: '',
-        telefone: '',
-        cargo: '',
-        departamento: '',
-        salario: '',
-        dataAdmissao: ''
-    });
 
     useEffect(() => {
         carregarColaboradores();
@@ -48,24 +37,19 @@ const ColaboradoresScreen = ({ onBack, moduleInfo }) => {
         }
     };
 
-    const salvarColaborador = async () => {
-        if (!formData.nome.trim()) {
-            Alert.alert('Erro', 'Nome é obrigatório');
-            return;
-        }
-
+    const salvarColaborador = async (colaboradorData) => {
         try {
             if (editingColaborador) {
                 // Atualizar colaborador existente
                 await updateDoc(doc(db, 'colaboradores', editingColaborador.id), {
-                    ...formData,
+                    ...colaboradorData,
                     updatedAt: new Date()
                 });
                 Alert.alert('Sucesso', 'Colaborador atualizado com sucesso');
             } else {
                 // Criar novo colaborador
                 await addDoc(collection(db, 'colaboradores'), {
-                    ...formData,
+                    ...colaboradorData,
                     createdAt: new Date(),
                     updatedAt: new Date()
                 });
@@ -105,44 +89,13 @@ const ColaboradoresScreen = ({ onBack, moduleInfo }) => {
     };
 
     const abrirModal = (colaborador = null) => {
-        if (colaborador) {
-            setEditingColaborador(colaborador);
-            setFormData({
-                nome: colaborador.nome || '',
-                email: colaborador.email || '',
-                telefone: colaborador.telefone || '',
-                cargo: colaborador.cargo || '',
-                departamento: colaborador.departamento || '',
-                salario: colaborador.salario || '',
-                dataAdmissao: colaborador.dataAdmissao || ''
-            });
-        } else {
-            setEditingColaborador(null);
-            setFormData({
-                nome: '',
-                email: '',
-                telefone: '',
-                cargo: '',
-                departamento: '',
-                salario: '',
-                dataAdmissao: ''
-            });
-        }
+        setEditingColaborador(colaborador);
         setModalVisible(true);
     };
 
     const fecharModal = () => {
         setModalVisible(false);
         setEditingColaborador(null);
-        setFormData({
-            nome: '',
-            email: '',
-            telefone: '',
-            cargo: '',
-            departamento: '',
-            salario: '',
-            dataAdmissao: ''
-        });
     };
 
     const colaboradoresFiltrados = colaboradores.filter(colaborador =>
@@ -218,83 +171,12 @@ const ColaboradoresScreen = ({ onBack, moduleInfo }) => {
             </ScrollView>
 
             {/* Modal de Formulário */}
-            <Modal
-                animationType="slide"
-                transparent={true}
+            <ColaboradorForm
                 visible={modalVisible}
-                onRequestClose={fecharModal}
-            >
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>
-                            {editingColaborador ? 'Editar Colaborador' : 'Novo Colaborador'}
-                        </Text>
-
-                        <ScrollView style={styles.formContainer}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Nome *"
-                                value={formData.nome}
-                                onChangeText={(text) => setFormData({ ...formData, nome: text })}
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Email"
-                                value={formData.email}
-                                onChangeText={(text) => setFormData({ ...formData, email: text })}
-                                keyboardType="email-address"
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Telefone"
-                                value={formData.telefone}
-                                onChangeText={(text) => setFormData({ ...formData, telefone: text })}
-                                keyboardType="phone-pad"
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Cargo"
-                                value={formData.cargo}
-                                onChangeText={(text) => setFormData({ ...formData, cargo: text })}
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Departamento"
-                                value={formData.departamento}
-                                onChangeText={(text) => setFormData({ ...formData, departamento: text })}
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Salário"
-                                value={formData.salario}
-                                onChangeText={(text) => setFormData({ ...formData, salario: text })}
-                                keyboardType="numeric"
-                            />
-
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Data de Admissão (DD/MM/AAAA)"
-                                value={formData.dataAdmissao}
-                                onChangeText={(text) => setFormData({ ...formData, dataAdmissao: text })}
-                            />
-                        </ScrollView>
-
-                        <View style={styles.modalActions}>
-                            <TouchableOpacity style={styles.cancelButton} onPress={fecharModal}>
-                                <Text style={styles.cancelButtonText}>Cancelar</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.saveButton} onPress={salvarColaborador}>
-                                <Text style={styles.saveButtonText}>Salvar</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+                onClose={fecharModal}
+                onSave={salvarColaborador}
+                editingColaborador={editingColaborador}
+            />
         </SafeAreaView>
     );
 };
