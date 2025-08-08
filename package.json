@@ -8,7 +8,7 @@
     "web": "npx expo start --web",
     "android": "npx expo start --android",
     "ios": "npx expo start --ios",
-    "build:web": "expo export --platform web --output-dir dist",
+    "build:web": "set NODE_OPTIONS=--max-old-space-size=4096 && expo export --platform web --output-dir dist",
     "serve:prod": "node server.js",
     "deploy": "npm run build:web && npm run serve:prod",
     "test": "jest",

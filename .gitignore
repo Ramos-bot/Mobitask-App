@@ -7,6 +7,15 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+# Build output
+dist/
+build/
+web-build/
+
+# Memory dumps and large files
+*.heapsnapshot
+*.hprof
+
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
