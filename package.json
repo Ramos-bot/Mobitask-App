@@ -14,7 +14,7 @@
     "build:web": "npx expo export --platform web",
     "production": "npx expo start --web --host lan --port 5000 --no-dev --minify",
     "serve": "npx serve -s web-build -p 5000 --host 0.0.0.0",
-    "deploy:replit": "npm install && npm run production",
+    "deploy:replit": "npm install && npx expo install --check && npm run production",
     "test": "jest",
     "lint": "eslint .",
     "clear": "npx expo start --clear"
