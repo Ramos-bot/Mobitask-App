@@ -1,8 +1,8 @@
-entrypoint = "index.js"
+entrypoint = "server.js"
 modules = ["nodejs-22"]
-hidden = [".config", "package-lock.json", ".expo", "node_modules", ".git"]
+hidden = [".config", "package-lock.json", ".expo", "node_modules", ".git", "dist"]
 
-run = "npm run replit:deploy"
+run = "npm start"
 
 [gitHubImport]
 requiredFiles = [".replit", "replit.nix", "package.json", "package-lock.json"]
@@ -11,9 +11,13 @@ requiredFiles = [".replit", "replit.nix", "package.json", "package-lock.json"]
 channel = "stable-24_11"
 
 [deployment]
-run = ["sh", "-c", "npm install && npm run replit:deploy"]
+run = ["sh", "-c", "npm ci && npm run build:web && npm start"]
 deploymentTarget = "autoscale"
 ignorePorts = false
+
+[[ports]]
+localPort = 5000
+externalPort = 80
 
 [workflows]
 runButton = "Deploy Production"
