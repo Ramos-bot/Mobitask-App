@@ -1,22 +1,44 @@
-modules = ["nodejs-20", "bash", "nix"]
-hidden = [".config", "package-lock.json", ".expo", "node_modules", ".git", "dist"]
-run = "node server.js"
+entrypoint = "index.js"
+modules = ["nodejs-22", "web"]
+hidden = [".config", "package-lock.json", ".expo", "node_modules", ".git"]
+
+run = "npm run web"
 
 [gitHubImport]
-requiredFiles = [".replit", "replit.nix", "package.json", "package-lock.json"]
+requiredFiles = [".replit", "replit.nix", "package.json", "index.js", "app.json"]
 
 [nix]
-channel = "stable-25_05"
+channel = "stable-24_11"
 
 [deployment]
-run = ["sh", "-c", "node server.js"]
+run = ["sh", "-c", "npm run production"]
 deploymentTarget = "autoscale"
 ignorePorts = false
-
-[[ports]]
-localPort = 5000
-externalPort = 80
 
 [env]
 NODE_ENV = "production"
 PORT = "5000"
+
+[languages.javascript]
+pattern = "**/{*.js,*.jsx,*.ts,*.tsx}"
+syntax = "javascript"
+
+[languages.javascript.languageServer]
+start = ["typescript-language-server", "--stdio"]
+
+[env]
+EXPO_DEVTOOLS_LISTEN_ADDRESS = "0.0.0.0"
+REACT_NATIVE_PACKAGER_HOSTNAME = "0.0.0.0"
+NODE_ENV = "development"
+
+[packager]
+language = "nodejs"
+ignoredPackages = ["unit_tests"]
+
+[packager.features]
+packageSearch = true
+guessImports = true
+enabledForHosting = false
+
+[unitTest]
+language = "nodejs"
