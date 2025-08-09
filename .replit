@@ -2,6 +2,7 @@ entrypoint = "server.js"
 modules = ["nodejs-22"]
 hidden = [".config", "package-lock.json", ".expo", "node_modules", ".git", "dist"]
 
+# Força o run local a usar o servidor Express
 run = "node server.js"
 
 [gitHubImport]
@@ -10,8 +11,11 @@ requiredFiles = [".replit", "replit.nix", "package.json", "package-lock.json"]
 [nix]
 channel = "stable-24_11"
 
+# Define comandos do Deployment separadamente
 [deployment]
-run = ["sh", "-c", "npm ci && npm run build:web && node server.js"]
+install = ["bash", "-lc", "npm ci"]
+build = ["bash", "-lc", "npm run build:web"]
+run = ["bash", "-lc", "node server.js"]
 deploymentTarget = "autoscale"
 ignorePorts = false
 
