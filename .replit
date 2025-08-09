@@ -39,3 +39,23 @@ enabledForHosting = false
 
 [unitTest]
 language = "nodejs"
+
+[workflows]
+runButton = "Production Deploy"
+
+[[workflows.workflow]]
+name = "Production Deploy"
+author = 45324416
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm ci"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run build:web"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server.js"
