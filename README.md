@@ -19,7 +19,18 @@ expo start --web
 expo start
 ```
 
-### 🌐 Deploy para Produção (Replit)
+### 🌐 Deploy para Produção
+
+#### Replit Deployment
+```bash
+# Comando automático (usado pelo .replit)
+npm run replit:deploy
+
+# Ou manualmente:
+npm run build:web && npm run serve:prod
+```
+
+#### Manual Deploy
 ```bash
 # Build e deploy em produção (porta 5000)
 npm run deploy
@@ -35,6 +46,12 @@ npm run serve:prod
 - **Endpoint**: `/health`
 - **Resposta**: `200 ok`
 - **URL**: `http://localhost:5000/health`
+
+### ⚠️ Troubleshooting Replit
+Se o deploy falhar no Replit:
+1. Verifique se a porta 5000 está disponível
+2. Execute `npm install` primeiro
+3. Use `npm run replit:deploy` em vez de `npm run deploy`
 
 ## 📱 Módulos Disponíveisk App - Sistema de Gestão Empresarial
 
