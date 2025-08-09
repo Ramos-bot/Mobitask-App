@@ -1,17 +1,15 @@
-entrypoint = "server.js"
-modules = ["nodejs-22"]
+modules = ["nodejs-20", "bash", "nix"]
 hidden = [".config", "package-lock.json", ".expo", "node_modules", ".git", "dist"]
-
 run = "node server.js"
 
 [gitHubImport]
 requiredFiles = [".replit", "replit.nix", "package.json", "package-lock.json"]
 
 [nix]
-channel = "stable-24_11"
+channel = "stable-25_05"
 
 [deployment]
-run = ["sh", "-c", "npm ci && npm run build:web && node server.js"]
+run = ["sh", "-c", "node server.js"]
 deploymentTarget = "autoscale"
 ignorePorts = false
 
