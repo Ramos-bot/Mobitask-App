@@ -1,0 +1,14 @@
+# Replit ignore file - otimiza sync GitHub ↔ Replit
+.git/
+node_modules/
+.expo/
+dist/
+.cache/
+.turbo/
+.DS_Store
+*.log
+.env.local
+.vscode/
+coverage/
+build/
+*.tgz
