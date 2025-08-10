@@ -28,6 +28,10 @@ syntax = "javascript"
 [languages.javascript.languageServer]
 start = ["typescript-language-server", "--stdio"]
 
+[[ports]]
+localPort = 5000
+externalPort = 80
+
 [packager]
 language = "nodejs"
 ignoredPackages = ["unit_tests"]
