@@ -18,6 +18,8 @@ ignorePorts = false
 [env]
 NODE_ENV = "production"
 PORT = "5000"
+EXPO_DEVTOOLS_LISTEN_ADDRESS = "0.0.0.0"
+REACT_NATIVE_PACKAGER_HOSTNAME = "0.0.0.0"
 
 [languages.javascript]
 pattern = "**/{*.js,*.jsx,*.ts,*.tsx}"
@@ -25,11 +27,6 @@ syntax = "javascript"
 
 [languages.javascript.languageServer]
 start = ["typescript-language-server", "--stdio"]
-
-[env]
-EXPO_DEVTOOLS_LISTEN_ADDRESS = "0.0.0.0"
-REACT_NATIVE_PACKAGER_HOSTNAME = "0.0.0.0"
-NODE_ENV = "development"
 
 [packager]
 language = "nodejs"
@@ -42,3 +39,23 @@ enabledForHosting = false
 
 [unitTest]
 language = "nodejs"
+
+[workflows]
+runButton = "Production Deploy"
+
+[[workflows.workflow]]
+name = "Production Deploy"
+author = 45324416
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm ci"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run build:web"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server.js"
