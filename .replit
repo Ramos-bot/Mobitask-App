@@ -11,9 +11,10 @@ requiredFiles = [".replit", "replit.nix", "package.json", "index.js", "app.json"
 channel = "stable-24_11"
 
 [deployment]
-run = ["sh", "-c", "npm run production"]
+run = ["sh", "-c", "node server.js"]
 deploymentTarget = "autoscale"
 ignorePorts = false
+build = ["sh", "-c", "npm run build:web  "]
 
 [env]
 NODE_ENV = "production"
@@ -59,3 +60,7 @@ args = "npm run build:web"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "node server.js"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
